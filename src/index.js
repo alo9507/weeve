@@ -1,17 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import DiscussionRoom from "./DiscussionRoom";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+import { Route, BrowserRouter as Router } from "react-router-dom";
+
+const RoutingWrapper = (
+  <Router>
+    <Route exact path="/" component={App} />
+    <Route exact path="/:roomID" component={DiscussionRoom} />
+  </Router>
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(RoutingWrapper, document.getElementById("root"));
