@@ -1,3 +1,12 @@
+# Weeve MVP Frontend
+
+## How to collaborate
+* Develop by branching off of development branch, ideally referencing the ticket in e.g. the branch name
+* When done, MR to staging
+* Once reviewed MR to master
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
