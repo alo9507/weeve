@@ -22,14 +22,7 @@ const DiscussionSession = (props) => {
 
   const switchToNext = () => {
     // Important to Dispose the backend and transport
-    jitsiAPI.executeCommand('hangup');
-    // TODO Another hack to change rooms - incomplete since we need to pass a different password per room (for example of invariability on each step)
-    let ff = jitsiAPI.getIFrame();
-    ff.src = "https://"+domain+"/"+nextRoom
-
-    // TODO Crap approach, we should keep state and only re-render the Jitsi Component
-    // props.history.push("/" + discussionID + "/" + nextRoom);
-    // window.location.reload(false);
+    jitsiAPI.dispose();
     setCurrentRoom(nextRoom);
   };
 

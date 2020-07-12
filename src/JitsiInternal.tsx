@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Props, JitsiMeetAPIOptions } from './types'
 import * as Default from './defaults'
 import { importJitsiApi } from './utils'
@@ -80,14 +80,14 @@ const JitsiInternal: React.FC<Props> = (props: Props) => {
 
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         console.log("UseEffect called!")
         importJitsiApi().then(jitsiApi => {
             startConference(jitsiApi);
         }).catch(err => {
             console.error('Jitsi Meet API library not loaded.', err)
         })
-    }, [])
+    }, [roomName])
 
     console.log("Rendering with loading", loading, ref)
     return (
