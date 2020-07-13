@@ -15,6 +15,7 @@ const Create = (props) => {
           <div className="create-content">
             <h1>Create A Session</h1>
             <p>Let's start creating a session, shall we?</p>
+            <p>to come</p>
           </div>
         </div>
         <div className="flex-item full-image">
