@@ -1,5 +1,5 @@
 import React, {useState } from "react";
-import JitsiInternal from "./JitsiInternal";
+import JitsiInternal from "../JitsiInternal";
 
 const domain = "167.172.10.231";
 const userFullName = "Johann Strawberry";
