@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, TextField} from '@material-ui/core';
+
 import axios from 'axios';
 
 class CreateForm extends React.Component {
@@ -44,7 +45,7 @@ class CreateForm extends React.Component {
     return (
       <form className="create-form" onSubmit={this.handleSubmit}>
         <TextField onChange={this.handleInputChange} name="topic" id="topic" label="Discussion Topic" variant="outlined" />
-        <TextField onChange={this.handleInputChange} name="datetime"
+        <TextField onChange={this.handleInputChange}
           name="datetime"
           id="datetime-local"
           label="Discussion Time & Date"

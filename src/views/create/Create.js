@@ -1,5 +1,4 @@
 import React from "react";
-import App from "../../components/App";
 import "./Create.scss";
 import { withStyles } from "@material-ui/core/styles";
 import CreateForm from "../../components/CreateForm";
@@ -59,7 +58,7 @@ class Create extends React.Component {
   render(){
     const { classes } = this.props;
     return (
-      <App>
+      <div>
         <div className="two-column">
           <div className="flex-item create-wrapper">
             <div className="create-content">
@@ -74,7 +73,7 @@ class Create extends React.Component {
         {this.state.discussionLink.length > 0 &&
         <CopyDiscussionDialog open={this.state.open} onClose={this.handleClose} discussionLink={this.state.discussionLink} width={this.state.width}  height={this.state.height} copied={false}></CopyDiscussionDialog>
         }
-      </App>
+      </div>
     );
   }
 };
