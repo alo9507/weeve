@@ -63,8 +63,8 @@ class Create extends React.Component {
         <div className="two-column">
           <div className="flex-item create-wrapper">
             <div className="create-content">
-              <h1>Create A Session</h1>
-              <p>Let's create session goodness, shall we?</p>
+              <h1>Schedule A Discussion</h1>
+              <p>Let's create discussion goodness, shall we?</p>
               <CreateForm updateDiscussionID={this.setDiscussionID}></CreateForm>
             </div>
           </div>

@@ -43,7 +43,7 @@ class CreateForm extends React.Component {
   render() {
     return (
       <form className="create-form" onSubmit={this.handleSubmit}>
-        <TextField onChange={this.handleInputChange} name="topic" id="topic" label="Topic" variant="outlined" />
+        <TextField onChange={this.handleInputChange} name="topic" id="topic" label="Discussion Topic" variant="outlined" />
         <TextField onChange={this.handleInputChange} name="datetime"
           name="datetime"
           id="datetime-local"
