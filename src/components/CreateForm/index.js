@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, TextField} from '@material-ui/core';
+import axios from 'axios';
 
 class CreateForm extends React.Component {
   constructor(props) {
@@ -7,7 +8,8 @@ class CreateForm extends React.Component {
     this.state = {
       topic: '',
       datetime: '',
-      currdatetime: new Date()
+      currdatetime: new Date(),
+      discussionID: ''
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,7 +28,16 @@ class CreateForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state.topic, ", ", this.state.datetime);
+    axios.post('api/discussions', {
+        topic: this.state.topic,
+        datetime: this.state.datetime
+    }).then(resp => {
+        console.log(resp.data.discussionID);
+        this.props.updateDiscussionID(resp.data.discussionID);
+        this.setState({discussionID: resp.data.discussionID});
+    }).catch(error => {
+        console.log(error);
+    });
   }
 
   render() {
@@ -46,7 +57,7 @@ class CreateForm extends React.Component {
           }}
         />
         <Button variant="contained" color="primary" type="submit">
-          Get Discussion Link
+          Create Discussion Link
         </Button>
       </form>
     );

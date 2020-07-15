@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import Create from "./create/Create";
-import DiscussionSession from "./discussion/DiscussionSession";
+import App from "./components/App";
+import Create from "./views/create/Create";
+import DiscussionSession from "./views/discussion/DiscussionSession";
 
 import { Route, BrowserRouter as Router, Switch} from "react-router-dom";
 
@@ -12,7 +12,7 @@ const RoutingWrapper = (
     <Switch>
       <Route exact path="/" component={App} />
       <Route exact path="/create" component={Create} />
-      <Route exact path="/:discussionID/:roomID?" component={DiscussionSession} />
+      <Route exact path="/discussion/:discussionID/:roomID?" component={DiscussionSession} />
     </Switch>
   </Router>
 );
