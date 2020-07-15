@@ -25,6 +25,7 @@ server.use(jsonServer.bodyParser)
 server.use((req, res, next) => {
   if (req.method === 'POST') {
     req.body.discussionID = uuidv4();
+    req.body.hasStarted = false;
   }
   // Continue to JSON Server router
   next()
