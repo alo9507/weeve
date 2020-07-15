@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/styles": "^4.10.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -13,12 +14,13 @@
     "json-server": "^0.16.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
+    "react-confetti": "^5.1.0",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-shader-canvas": "^1.0.0",
     "typescript": "^3.9.6",
-    "uniqid": "^5.2.0",
     "uuid": "^8.2.0"
   },
   "scripts": {
