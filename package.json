@@ -3,17 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@material-ui/pickers": "^3.2.10",
+    "@material-ui/styles": "^4.10.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
+    "json-server": "^0.16.1",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
+    "react-confetti": "^5.1.0",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "typescript": "^3.9.6"
+    "react-shader-canvas": "^1.0.0",
+    "typescript": "^3.9.6",
+    "uuid": "^8.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "node server.js;",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -40,6 +52,8 @@
     "@storybook/addon-links": "^5.3.19",
     "@storybook/addons": "^5.3.19",
     "@storybook/preset-create-react-app": "^3.1.2",
-    "@storybook/react": "^5.3.19"
-  }
+    "@storybook/react": "^5.3.19",
+    "uniqueid": "^1.0.0"
+  },
+  "proxy": "http://127.0.0.1:4000"
 }
