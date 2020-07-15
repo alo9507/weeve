@@ -2,6 +2,7 @@ import React from "react";
 import "./Create.scss";
 import { withStyles } from "@material-ui/core/styles";
 import CreateForm from "../../components/CreateForm";
+import ShaderCanvas from "../../components/ShaderCanvas";
 import CopyDiscussionDialog from "../../components/CopyDiscussionDialog";
 
 const styles = theme => ({
@@ -68,6 +69,7 @@ class Create extends React.Component {
             </div>
           </div>
           <div className={`${classes.fullImage} flex-item`}>
+            <ShaderCanvas width={this.state.width} height={this.state.height}></ShaderCanvas>
           </div>
         </div>
         {this.state.discussionLink.length > 0 &&
