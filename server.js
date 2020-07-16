@@ -25,7 +25,25 @@ server.use(jsonServer.bodyParser)
 server.use((req, res, next) => {
   if (req.method === 'POST') {
     req.body.discussionID = uuidv4();
-    req.body.hasStarted = false;
+    req.body.currentRoom = -1;
+    req.body.rooms = [
+      {
+        id: uuidv4(),
+        durationInMinutes: 5
+      },
+      {
+        id: uuidv4(),
+        durationInMinutes: 5
+      },
+      {
+        id: uuidv4(),
+        durationInMinutes: 5
+      },
+      {
+        id: uuidv4(),
+        durationInMinutes: 5
+      }
+    ]
   }
   // Continue to JSON Server router
   next()

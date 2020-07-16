@@ -22,8 +22,8 @@ class Create extends React.Component {
     this.state = {
       discussionLink: '',
       open: true,
-      width: '',
-      height: ''
+      width: 0,
+      height: 0
     };
     this.setDiscussionID = this.setDiscussionID.bind(this);
     this.handleClose = this.handleClose.bind(this);

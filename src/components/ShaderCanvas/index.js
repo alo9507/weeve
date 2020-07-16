@@ -96,8 +96,8 @@ const ShaderCanvas = (props) => {
 };
 
 ShaderCanvas.propTypes = {
-  width: PropTypes.string.isRequired,
-  height: PropTypes.string.isRequired
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
 };
 
 export default ShaderCanvas;
