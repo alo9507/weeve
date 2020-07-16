@@ -3,16 +3,13 @@ import "./style.css";
 import logo from "../../assets/images/image-logo.svg";
 import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
+import pink from '@material-ui/core/colors/pink';
 
 const theme = createMuiTheme({
   palette: {
-    primary: {
-      main: purple[500],
-    },
+    primary: pink,
     secondary: {
-      main: green[500],
+      main: '#ab47bc',
     },
   },
 });
