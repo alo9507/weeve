@@ -1,9 +1,9 @@
 export class Discussion {
-    _id?: string;
+    _id: string;
     topic: string = '';
     startTime: Date = null;
-    discussionID?: string = '';
-    users?: string[];
+    discussionID: string = '';
+    users: string[] = [];
     ready: boolean = false;
 }
 
