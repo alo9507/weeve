@@ -24,4 +24,11 @@ export class AppController {
     let dd = await this.appService.joinDiscussion(joinDiscussion);
     return res.status(HttpStatus.OK).json(dd);
   }
+
+  @Post('/nextRoom')
+  async calculateNextRoom(@Body() joinDiscussion: JoinDiscussionBody, @Res() res: Response) {
+    let dd = await this.appService.calculateNextRoom(joinDiscussion.userID, joinDiscussion.discussionID);
+    return res.status(HttpStatus.OK).json(dd);
+  }
+
 }
