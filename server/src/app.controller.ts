@@ -14,7 +14,7 @@ export class AppController {
   }
 
   @Post()
-  async storeDiscussion(@Body() discussion: Discussion, @Res() res: Response) {
+  async createDiscussion(@Body() discussion: Discussion, @Res() res: Response) {
     await this.appService.storeDiscussion(discussion);
     return res.status(HttpStatus.OK).send();
   }

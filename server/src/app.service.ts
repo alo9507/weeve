@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException, ForbiddenException} from '@nestjs/common';
+import {Injectable, NotFoundException, ForbiddenException, BadRequestException} from '@nestjs/common';
 import {Discussion, JoinDiscussionBody, DiscussionResponse, UserRoomMapping} from "./models/discussion";
 const { v4: uuidv4 } = require('uuid');
 import { DatabaseService } from './database/database.service';
@@ -14,6 +14,13 @@ export class AppService {
   }
 
   async storeDiscussion(disc: Discussion) {
+    if (!disc.discussionID) {
+      disc.discussionID = uuidv4();
+    }
+    if (!disc.startTime) {
+      throw new BadRequestException('startTime is required');
+    }
+
     let discFound = await this.databaseService.discussions.findOne({
       discussionID: disc.discussionID
     });
@@ -27,6 +34,12 @@ export class AppService {
   }
 
   async getDiscussionData(id: string): Promise<Discussion> {
+    let discFound = await this.getDiscussionDataInternal(id);
+    discFound.userRoomMapping = undefined; //empty mappings to be returned
+    return discFound;
+  }
+
+  async getDiscussionDataInternal(id: string): Promise<Discussion> {
     let discFound = await this.databaseService.discussions.findOne({
       discussionID: id
     });
@@ -39,20 +52,21 @@ export class AppService {
     if (disc.userID == '' || disc.userID == undefined) {
       disc.userID = uuidv4();
     }
-    let discFound = await this.getDiscussionData(disc.discussionID);
+    let discFound = await this.getDiscussionDataInternal(disc.discussionID);
 
     if (!discFound.users) {
       discFound.users = []
     }
-    if (!this.stringInList(discFound.users, disc.userID)) {
+    if (!this.stringInList(discFound.users, disc.userID) && !discFound.started) {
         discFound.users.push(disc.userID);
         await this.databaseService.discussions.updateById(discFound._id, discFound);
     }
 
     let jdr = new DiscussionResponse();
+    jdr.roomID = await this.findRoomForUser(disc.userID, discFound);
+    discFound.userRoomMapping = undefined; //empty mappings to be returned
     jdr.discussion = discFound;
     jdr.userID = disc.userID;
-    jdr.roomID = await this.findRoomForUser(disc.userID, discFound);
 
     return jdr;
   }
@@ -66,6 +80,9 @@ export class AppService {
     }
 
     if (!discFound.started) {
+      if (discFound.users.length < MIN_PARTICIPANTS) {
+        throw new BadRequestException("MIN_PARTICIPANTS not met: "+discFound.users.length+"/"+MIN_PARTICIPANTS);
+      }
       discFound.userRoomMapping = this.generateRooms(userID, discFound);
       discFound.currentStage = 0;
       discFound.started = true;
@@ -79,9 +96,10 @@ export class AppService {
     }
 
     let jdr = new DiscussionResponse();
+    jdr.roomID = this.findRoomForUser(userID, discFound);
+    discFound.userRoomMapping = undefined; //empty mappings to be returned
     jdr.discussion = discFound;
     jdr.userID = userID;
-    jdr.roomID = this.findRoomForUser(userID, discFound);
 
     //unlock
     return jdr
@@ -95,7 +113,6 @@ export class AppService {
 
 
   generateRooms(userID:string, disc: Discussion): UserRoomMapping[] {
-    let roomMappings = [];
     let roomMappingsMap = new Map<string, UserRoomMapping>();
 
     // Setup stage ONE "rooms"
@@ -139,12 +156,12 @@ export class AppService {
     }
 
     // Setup ALL "room"
+    let roomID = uuidv4();
     disc.users.forEach(function (item) {
-      let roomID = uuidv4();
       roomMappingsMap.get(item).stages.push(roomID);
     });
-    
-    return roomMappings;
+
+    return Array.from(roomMappingsMap.values());
 
   }
 
@@ -158,9 +175,10 @@ export class AppService {
     }
 
   }
+
   findRoomForUser(userID: string, disc: Discussion): string {
     let roomFound = 'lobbyUUID';
-    let mapping = disc.userRoomMapping.find(elem => (elem.userID == userID));
+    let mapping = disc.userRoomMapping?.find(elem => (elem.userID == userID));
     return mapping?.stages[disc.currentStage] ? mapping?.stages[disc.currentStage] : roomFound
   }
 

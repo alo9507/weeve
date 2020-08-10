@@ -4,7 +4,7 @@ export class Discussion {
     startTime: Date = null;
     discussionID: string = '';
     users: string[] = [];
-    userRoomMapping: UserRoomMapping[] = [];
+    userRoomMapping?: UserRoomMapping[] = [];
     stagesDuration: number[] = [];
     currentStage: number;
     started: boolean = false;
