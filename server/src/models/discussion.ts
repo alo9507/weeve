@@ -4,7 +4,15 @@ export class Discussion {
     startTime: Date = null;
     discussionID: string = '';
     users: string[] = [];
-    ready: boolean = false;
+    userRoomMapping?: UserRoomMapping[] = [];
+    stagesDuration: number[] = [];
+    currentStage: number;
+    started: boolean = false;
+}
+
+export class UserRoomMapping {
+    userID: string = '';
+    stages: string[] = [];
 }
 
 export class JoinDiscussionBody {
@@ -12,7 +20,7 @@ export class JoinDiscussionBody {
     userID?: string = '';
 }
 
-export class JoinDiscussionResponse {
+export class DiscussionResponse {
     userID?: string = '';
     discussion?: Discussion;
     roomID?: string = '';
