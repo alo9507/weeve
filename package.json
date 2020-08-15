@@ -11,7 +11,6 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
-    "json-server": "^0.16.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-confetti": "^5.1.0",
@@ -22,7 +21,8 @@
     "react-scripts": "3.4.1",
     "react-shader-canvas": "^1.0.0",
     "typescript": "^3.9.6",
-    "uuid": "^8.2.0"
+    "uuid": "^8.2.0",
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -56,5 +56,5 @@
     "@storybook/react": "^5.3.19",
     "uniqueid": "^1.0.0"
   },
-  "proxy": "http://127.0.0.1:4000"
+  "proxy": "http://127.0.0.1:3001"
 }

@@ -14,7 +14,7 @@ const RoutingWrapper = (
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/create" component={Create} />
-      <Route exact path="/discussion/:discussionID/:roomID?" component={DiscussionSession} />
+      <Route exact path="/discussion/:discussionID" component={DiscussionSession} />
     </Switch>
     </App>
   </Router>

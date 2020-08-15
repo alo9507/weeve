@@ -17,6 +17,11 @@ export class AppService {
     if (!disc.discussionID) {
       disc.discussionID = uuidv4();
     }
+
+    if (!disc.defaultRoom) {
+      disc.defaultRoom = uuidv4();
+    }
+
     if (!disc.startTime) {
       throw new BadRequestException('startTime is required');
     }
@@ -49,7 +54,7 @@ export class AppService {
   }
 
   async joinDiscussion(disc: JoinDiscussionBody): Promise<DiscussionResponse> {
-    if (disc.userID == '' || disc.userID == undefined) {
+    if (disc.userID == '' || disc.userID == undefined || disc.userID == "undefined") {
       disc.userID = uuidv4();
     }
     let discFound = await this.getDiscussionDataInternal(disc.discussionID);
@@ -90,6 +95,10 @@ export class AppService {
     }
 
     // Move to next stage?
+    console.log(Date.now());
+    let nn: number = discFound.startTime.valueOf() + 10;
+    console.log(nn);
+
     if ((discFound.startTime.valueOf() + this.calculateNextStageOffset(discFound)) >= Date.now() && (discFound.stagesDuration.length <= discFound.currentStage+1)) {
       discFound.currentStage += 1;
       await this.databaseService.discussions.updateById(discFound._id, discFound);
@@ -108,6 +117,7 @@ export class AppService {
   calculateNextStageOffset(disc: Discussion): number {
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
     let totalMin = disc.stagesDuration.slice(0, disc.currentStage+1).reduce(reducer);
+    console.log(totalMin);
     return totalMin * 60000 // convert minutes to milliseconds
   }
 
@@ -177,7 +187,7 @@ export class AppService {
   }
 
   findRoomForUser(userID: string, disc: Discussion): string {
-    let roomFound = 'lobbyUUID';
+    let roomFound = disc.defaultRoom;
     let mapping = disc.userRoomMapping?.find(elem => (elem.userID == userID));
     return mapping?.stages[disc.currentStage] ? mapping?.stages[disc.currentStage] : roomFound
   }

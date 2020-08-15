@@ -11,7 +11,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Routes
 
-* Discussion rooms: `/discussion/:id/:roomid`
+* Discussion rooms: `/discussion/:id`
 * Create Page: `/create`
 
 ## Available Scripts

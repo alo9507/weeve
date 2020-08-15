@@ -29,9 +29,10 @@ class CreateForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    axios.post('api/discussions', {
+    axios.post('http://localhost:3001/discussions', {
         topic: this.state.topic,
-        datetime: this.state.datetime
+        startTime: this.state.datetime
+        //FINISH ADDING OPTIONS
     }).then(resp => {
         console.log(resp.data.discussionID);
         this.props.updateDiscussionID(resp.data.discussionID);
