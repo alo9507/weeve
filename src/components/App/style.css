@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;1,700&family=Saira:wght@500;700;900&display=swap');
+
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+     box-sizing: border-box;
+}
+
+h1,h2,h3,h4,h5{
+  font-family: 'Saira', sans-serif;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.App {
+  text-align: left;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+
+.App-header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  height: 68px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  position: fixed;
+  top:0;
+  left:0;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.App-wrapper{
+  height: 100vh;
+}

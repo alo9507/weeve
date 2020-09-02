@@ -1,15 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import DiscussionRoom from "./DiscussionRoom";
+import App from "./components/App";
+import Home from "./views/Home"
+import Create from "./views/create/Create";
+import DiscussionSession from "./views/discussion/DiscussionSession";
 
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch} from "react-router-dom";
 
 const RoutingWrapper = (
   <Router>
-    <Route exact path="/" component={App} />
-    <Route exact path="/:roomID" component={DiscussionRoom} />
+    <App>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/create" component={Create} />
+      <Route exact path="/discussion/:discussionID" component={DiscussionSession} />
+    </Switch>
+    </App>
   </Router>
 );
 
