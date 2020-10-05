@@ -32,7 +32,9 @@ class CreateForm extends React.Component {
     event.preventDefault();
     axios.post('http://localhost:3001/discussions', {
         topic: this.state.topic,
-        startTime: this.state.datetime
+        startTime: this.state.datetime,
+        stagesDuration: [60000, 60000, 60000],
+        currentStage: 0
         //FINISH ADDING OPTIONS
     }).then(resp => {
         console.log(resp.data.discussionID);

@@ -16,7 +16,6 @@ export class AppService {
   async storeDiscussion(disc: Discussion) {
     if (!disc.discussionID) {
       disc.discussionID = uuidv4();
-      console.log("disc.discussionId", disc.discussionID)
     }
 
     if (!disc.defaultRoom) {
@@ -36,7 +35,6 @@ export class AppService {
     } else {
       await this.databaseService.discussions.insert(disc);
     }
-    console.log("discussion: ", disc)
     return disc;
   }
 
@@ -83,7 +81,7 @@ export class AppService {
     let discFound = await this.getDiscussionData(discID);
 
     if (!this.stringInList(discFound.users, userID)) {
-      throw new ForbiddenException('User not allowed');
+      throw new ForbiddenException(`User ${userID} not allowed authorized to enter discussion ${discFound.discussionID}`);
     }
 
     if (!discFound.started) {
@@ -91,6 +89,7 @@ export class AppService {
         throw new BadRequestException("MIN_PARTICIPANTS not met: "+discFound.users.length+"/"+MIN_PARTICIPANTS);
       }
       discFound.userRoomMapping = this.generateRooms(userID, discFound);
+      console.log("user room mapping", discFound.userRoomMapping)
       discFound.currentStage = 0;
       discFound.started = true;
       await this.databaseService.discussions.updateById(discFound._id, discFound);
