@@ -16,6 +16,7 @@ export class AppService {
   async storeDiscussion(disc: Discussion) {
     if (!disc.discussionID) {
       disc.discussionID = uuidv4();
+      console.log("disc.discussionId", disc.discussionID)
     }
 
     if (!disc.defaultRoom) {
@@ -35,7 +36,8 @@ export class AppService {
     } else {
       await this.databaseService.discussions.insert(disc);
     }
-    return;
+    console.log("discussion: ", disc)
+    return disc;
   }
 
   async getDiscussionData(id: string): Promise<Discussion> {
