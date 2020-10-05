@@ -10,7 +10,8 @@ class CreateForm extends React.Component {
       topic: '',
       datetime: '',
       currdatetime: new Date(),
-      discussionID: ''
+      discussionID: '',
+      datetime: new Date().toISOString().slice(0, 16)
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -51,9 +52,7 @@ class CreateForm extends React.Component {
           id="datetime-local"
           label="Discussion Time & Date"
           type="datetime-local"
-          defaultValue={this.state.currdatetime
-                            .toISOString()
-                            .slice(0, 16)}
+          defaultValue={this.state.datetime}
           InputLabelProps={{
             shrink: true,
           }}

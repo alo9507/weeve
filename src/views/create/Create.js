@@ -68,9 +68,9 @@ class Create extends React.Component {
               <CreateForm updateDiscussionID={this.setDiscussionID}></CreateForm>
             </div>
           </div>
-          <div className={`${classes.fullImage} flex-item`}>
+          {/* <div className={`${classes.fullImage} flex-item`}>
             <ShaderCanvas width={this.state.width} height={this.state.height}></ShaderCanvas>
-          </div>
+          </div> */}
         </div>
         {this.state.discussionLink.length > 0 &&
         <CopyDiscussionDialog open={this.state.open} onClose={this.handleClose} discussionLink={this.state.discussionLink} width={this.state.width}  height={this.state.height} copied={false}></CopyDiscussionDialog>
