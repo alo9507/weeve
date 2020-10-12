@@ -4,7 +4,7 @@ describe('Service Tests', () => {
     describe('UserRoomMapping Generator', () => {
       it('correctly generates a map of UUIDs according to participant count and room configuration', () => {
         const users = ["user1", "user2", "user3"]
-        const participantCountToRoomId = UserMapGenerator.uuidGenerator(users.length)
+        const participantCountToRoomId = UserMapGenerator.participantCountToRoomIdGenerator(users.length)
         expect(participantCountToRoomId.length).toEqual(4)
         expect(participantCountToRoomId[0].participantCount).toEqual(1)
         expect(participantCountToRoomId[1].participantCount).toEqual(1)
@@ -12,7 +12,7 @@ describe('Service Tests', () => {
         expect(participantCountToRoomId[3].participantCount).toEqual(3)
       });
 
-      it('correctly masks uuids to room configurations', () => {
+      it('correctly creates room configurations based on participant count', () => {
         let two = [1,1,2]
         let three = [1,1,1,3]
         let four = [1,1,1,1,2,2,4]
@@ -22,13 +22,13 @@ describe('Service Tests', () => {
         let eight = [1,1,1,1,1,1,1,1,2,2,2,2,4,4,8]
         let nine = [1,1,1,1,1,1,1,1,1,2,2,2,3,4,5,9]
 
-        expect(UserMapGenerator.uuidMask(2)).toEqual(two)
-        expect(UserMapGenerator.uuidMask(3)).toEqual(three)
-        expect(UserMapGenerator.uuidMask(4)).toEqual(four)
-        expect(UserMapGenerator.uuidMask(5)).toEqual(five)
-        expect(UserMapGenerator.uuidMask(6)).toEqual(six)
-        expect(UserMapGenerator.uuidMask(7)).toEqual(seven)
-        expect(UserMapGenerator.uuidMask(8)).toEqual(eight)
+        expect(UserMapGenerator.roomConfigurationGenerator(2)).toEqual(two)
+        expect(UserMapGenerator.roomConfigurationGenerator(3)).toEqual(three)
+        expect(UserMapGenerator.roomConfigurationGenerator(4)).toEqual(four)
+        expect(UserMapGenerator.roomConfigurationGenerator(5)).toEqual(five)
+        expect(UserMapGenerator.roomConfigurationGenerator(6)).toEqual(six)
+        expect(UserMapGenerator.roomConfigurationGenerator(7)).toEqual(seven)
+        expect(UserMapGenerator.roomConfigurationGenerator(8)).toEqual(eight)
       })
 
       it('correctly generates user to room maps for three participants', () => {
