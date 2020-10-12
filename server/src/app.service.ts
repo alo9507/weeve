@@ -3,7 +3,7 @@ import {Discussion, JoinDiscussionBody, DiscussionResponse, UserRoomMapping} fro
 const { v4: uuidv4 } = require('uuid');
 import { DatabaseService } from './database/database.service';
 
-const MIN_PARTICIPANTS: number = 8;
+const MIN_PARTICIPANTS: number = 2;
 
 @Injectable()
 export class AppService {
@@ -100,7 +100,9 @@ export class AppService {
     let nn: number = discFound.startTime.valueOf() + 10;
     console.log(nn);
 
-    if ((discFound.startTime.valueOf() + this.calculateNextStageOffset(discFound)) >= Date.now() && (discFound.stagesDuration.length <= discFound.currentStage+1)) {
+    const currentStageTime = (discFound.startTime.valueOf() + this.calculateNextStageOffset(discFound))
+
+    if (currentStageTime >= Date.now() && (discFound.stagesDuration.length <= discFound.currentStage+1)) {
       discFound.currentStage += 1;
       await this.databaseService.discussions.updateById(discFound._id, discFound);
     }
@@ -126,6 +128,19 @@ export class AppService {
   generateRooms(userID:string, disc: Discussion): UserRoomMapping[] {
     let roomMappingsMap = new Map<string, UserRoomMapping>();
 
+    // const participantCount = disc.users.length
+
+    // if participantCount == 2 {
+    //   let mapping = new UserRoomMapping();
+    //   mapping.stages = [];
+    //   mapping.stages.push(uuidv4());
+    //   mapping.userID = item;
+
+    //   roomMappingsMap.set(item, mapping);
+
+    //   return Array.from(roomMappingsMap.values());
+    // }
+
     // Setup stage ONE "rooms"
     disc.users.forEach(function (item) {
       let mapping = new UserRoomMapping();
@@ -135,6 +150,13 @@ export class AppService {
 
       roomMappingsMap.set(item, mapping);
     });
+
+    // const thing  = [2: [1,1,2], 3: [1,1,1,3], 4: [1,1,1,1,2,2,4]]
+    // const roomConfig = thing[participantCount]
+    
+    // [Math.repeat(1,participanCount)]
+    
+    // if participanCount%2==0 {}
 
     // Setup stage TWO rooms
     let paired: number[] = [];
@@ -190,6 +212,7 @@ export class AppService {
   findRoomForUser(userID: string, disc: Discussion): string {
     let roomFound = disc.defaultRoom;
     let mapping = disc.userRoomMapping?.find(elem => (elem.userID == userID));
+    // return mapping?.stages[disc.currentStage] ? : roomFound
     return mapping?.stages[disc.currentStage] ? mapping?.stages[disc.currentStage] : roomFound
   }
 
