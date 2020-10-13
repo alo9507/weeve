@@ -6,21 +6,20 @@ const userMapGenerator = (users) => {
     const participantCountToRoomId = participantCountToRoomIdGenerator(users.length)
     const userRoomMap = {}
     let userPool = [...users]
-    
+
     // The offset tracks the upper bound on
     let offset = users.length
-    
+
     // Where to begin taking entries from
     let startingPoint = 0
-    
+
     var iterationCount = 0
 
     while (offset > 0) {
         while (iterationCount < offset) {
             let entry = participantCountToRoomId[startingPoint + iterationCount]
 
-            var j;
-            for (j = 0; j < entry.participantCount; j++) {
+            for (let j = 0; j < entry.participantCount; j++) {
                 const user = userPool.pop()
 
                 // initialize the roomId array for user if it's the first run
@@ -41,7 +40,7 @@ const userMapGenerator = (users) => {
         // 7 participants: [1,1,1,1,1,1,1,2,2,3,7] -> first 7, then 3, then 1
         // 8 participants: [1,1,1,1,1,1,1,1,2,2,2,2,4,4,8] -> first 8, then 4, then 2, then 1
         offset = Math.floor(offset / 2)
-        
+
         // reset the iteration count
         iterationCount = 0
 
@@ -51,21 +50,43 @@ const userMapGenerator = (users) => {
 
     return userRoomMap
 }
+
 /**
  * @param  {number} discussionCount the number of TOTAL users in the discussion
  */
 const roomConfigurationGenerator = (discussionCount) => {
-    switch (discussionCount) {
-        case 2: return [1,1,2]
-        case 3: return [1,1,1,3]
-        case 4: return [1,1,1,1,2,2,4]
-        case 5: return [1,1,1,1,1,2,3,5]
-        case 6: return [1,1,1,1,1,1,2,2,2,6]
-        case 7: return [1,1,1,1,1,1,1,2,2,3,7]
-        case 8: return [1,1,1,1,1,1,1,1,2,2,2,2,4,4,8]
-        default: throw new Error("Discussion participant count is invalid")
+    // Init with 1st stage
+    let rooms = Array(discussionCount).fill(1);
+    if (discussionCount < 2) {
+        return rooms;
     }
+
+    let isEven = (discussionCount%2 === 0);
+
+    // Fill 2nd stage
+    let roomNumber = Math.floor(discussionCount/2);
+    rooms = [...rooms, ...Array(roomNumber).fill(2)];
+    if (!isEven) {
+        rooms[rooms.length-1] = 3;
+    }
+    if (discussionCount < 4) {
+        return rooms;
+    }
+
+    // Fill 3rd stage
+    roomNumber = Math.floor(discussionCount/4);
+    rooms = [...rooms, ...Array(roomNumber).fill(4)];
+    rooms[rooms.length-1] = (4 + discussionCount%4);
+    if (discussionCount < 8) {
+        return rooms
+    }
+
+    // Fill 4th stage
+    rooms.push(discussionCount);
+
+    return rooms;
 }
+
 /**
  * @param  {number} discussionCount  the number of TOTAL users in the discussion
  * participantCountToRoomIdGenerator outputs an array of small dictionaries in the form:
