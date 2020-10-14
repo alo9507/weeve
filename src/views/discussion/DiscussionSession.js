@@ -12,7 +12,9 @@ const userFullName = "Johann Strawberry";
 const DiscussionSession = (props) => {
   const [discussionID, setDiscussionID] = useState('');
 
-  const [currentRoom, setCurrentRoom] = useState('');
+  const [currentRoomId, setCurrentRoomId] = useState('');
+  const [discussion, setDiscussion] = useState({});
+
   const [jitsiAPI, setJitsiAPI] = useState("");
 
   const handleAPI = (JitsiMeetAPI) => {
@@ -36,11 +38,21 @@ const DiscussionSession = (props) => {
     });
 
     if (result?.data?.discussion){
-      setCurrentRoom(result.data.roomID);
+      setCurrentRoomId(result.data.roomID);
+      setDiscussion(result.data.discussion)
     } else {
       setDiscussionID(false);
     }
   };
+
+  useEffect(() => {
+    const { currentStage, stagesDuration } = discussion
+    console.log(currentStage)
+    console.log(stagesDuration)
+    const roomTransferTime = stagesDuration[currentStage]
+
+    setTimeout(switchToNext, roomTransferTime - Date.now());
+  }, []) // change on current stage change
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,8 +68,9 @@ const DiscussionSession = (props) => {
 
       if (result.data?.discussion) {
         cookies.set('userID', result.data.userID, { path: '/' });
+        console.log("data:",result.data)
         setDiscussionID(result.data.discussion.discussionID);
-        setCurrentRoom(result.data.roomID);
+        setCurrentRoomId(result.data.roomID);
       } else {
         setDiscussionID(false);
       }
@@ -66,15 +79,15 @@ const DiscussionSession = (props) => {
     fetchData();
   }, []);
 
-  if(discussionID && currentRoom){
+  if(discussionID && currentRoomId){
     return (
       <div className="Stage-container">
         {discussionID &&
           <div>
-            <h1>{`Discussion ${discussionID} in Room ${currentRoom}`}</h1>
+            <h1>{`Discussion ${discussionID} in Room ${currentRoomId} at stage`}</h1>
             <JitsiInternal
               onAPILoad={handleAPI}
-              roomName={currentRoom}
+              roomName={currentRoomId}
               displayName={userFullName}
               domain={domain}
             />

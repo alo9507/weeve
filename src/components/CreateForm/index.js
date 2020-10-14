@@ -10,7 +10,8 @@ class CreateForm extends React.Component {
       topic: '',
       datetime: '',
       currdatetime: new Date(),
-      discussionID: ''
+      discussionID: '',
+      datetime: new Date().toISOString().slice(0, 16)
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -31,7 +32,9 @@ class CreateForm extends React.Component {
     event.preventDefault();
     axios.post('http://localhost:3001/discussions', {
         topic: this.state.topic,
-        startTime: this.state.datetime
+        startTime: this.state.datetime,
+        stagesDuration: [60000, 60000, 60000],
+        currentStage: 0
         //FINISH ADDING OPTIONS
     }).then(resp => {
         console.log(resp.data.discussionID);
@@ -51,9 +54,7 @@ class CreateForm extends React.Component {
           id="datetime-local"
           label="Discussion Time & Date"
           type="datetime-local"
-          defaultValue={this.state.currdatetime
-                            .toISOString()
-                            .slice(0, 16)}
+          defaultValue={this.state.datetime}
           InputLabelProps={{
             shrink: true,
           }}

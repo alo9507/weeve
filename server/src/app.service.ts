@@ -1,9 +1,10 @@
 import {Injectable, NotFoundException, ForbiddenException, BadRequestException} from '@nestjs/common';
 import {Discussion, JoinDiscussionBody, DiscussionResponse, UserRoomMapping} from "./models/discussion";
 const { v4: uuidv4 } = require('uuid');
+const roomUtils = require("utils/roomUtils");
 import { DatabaseService } from './database/database.service';
 
-const MIN_PARTICIPANTS: number = 8;
+const MIN_PARTICIPANTS: number = 2;
 
 @Injectable()
 export class AppService {
@@ -35,7 +36,7 @@ export class AppService {
     } else {
       await this.databaseService.discussions.insert(disc);
     }
-    return;
+    return disc;
   }
 
   async getDiscussionData(id: string): Promise<Discussion> {
@@ -81,14 +82,18 @@ export class AppService {
     let discFound = await this.getDiscussionData(discID);
 
     if (!this.stringInList(discFound.users, userID)) {
-      throw new ForbiddenException('User not allowed');
+      throw new ForbiddenException(`User ${userID} not allowed authorized to enter discussion ${discFound.discussionID}`);
     }
 
     if (!discFound.started) {
       if (discFound.users.length < MIN_PARTICIPANTS) {
         throw new BadRequestException("MIN_PARTICIPANTS not met: "+discFound.users.length+"/"+MIN_PARTICIPANTS);
       }
-      discFound.userRoomMapping = this.generateRooms(userID, discFound);
+      const roomUtilsInstance = new roomUtils.RoomUtils();
+      const umg = roomUtilsInstance.userMapGenerator(discFound.users);
+      // Convert to array to store in DB
+      discFound.userRoomMapping = Array.from(umg.values());
+      console.log("user room mapping", discFound.userRoomMapping);
       discFound.currentStage = 0;
       discFound.started = true;
       await this.databaseService.discussions.updateById(discFound._id, discFound);
@@ -99,7 +104,9 @@ export class AppService {
     let nn: number = discFound.startTime.valueOf() + 10;
     console.log(nn);
 
-    if ((discFound.startTime.valueOf() + this.calculateNextStageOffset(discFound)) >= Date.now() && (discFound.stagesDuration.length <= discFound.currentStage+1)) {
+    const currentStageTime = (discFound.startTime.valueOf() + this.calculateNextStageOffset(discFound));
+
+    if (currentStageTime >= Date.now() && (discFound.stagesDuration.length <= discFound.currentStage+1)) {
       discFound.currentStage += 1;
       await this.databaseService.discussions.updateById(discFound._id, discFound);
     }
@@ -121,60 +128,6 @@ export class AppService {
     return totalMin * 60000 // convert minutes to milliseconds
   }
 
-
-  generateRooms(userID:string, disc: Discussion): UserRoomMapping[] {
-    let roomMappingsMap = new Map<string, UserRoomMapping>();
-
-    // Setup stage ONE "rooms"
-    disc.users.forEach(function (item) {
-      let mapping = new UserRoomMapping();
-      mapping.stages = [];
-      mapping.stages.push(uuidv4());
-      mapping.userID = item;
-
-      roomMappingsMap.set(item, mapping);
-    });
-
-    // Setup stage TWO rooms
-    let paired: number[] = [];
-    let stage2Pairs: number[][]  = [];
-    for (let i = 0; i < disc.users.length/2; i++) {
-      let pair0 = this.generateRandomAllowedNumber(paired, disc.users.length);
-      paired.push(pair0);
-      let pair1 = this.generateRandomAllowedNumber(paired, disc.users.length);
-      paired.push(pair1);
-      let roomID = uuidv4();
-      roomMappingsMap.get(disc.users[pair0]).stages.push(roomID);
-      roomMappingsMap.get(disc.users[pair1]).stages.push(roomID);
-      stage2Pairs.push([pair0, pair1])
-    }
-
-    // Setup stage FOUR "rooms"
-    paired = [];
-    for (let i = 0; i < stage2Pairs.length/2; i++) {
-      let pair0 = this.generateRandomAllowedNumber(paired, stage2Pairs.length);
-      paired.push(pair0);
-      let pair1 = this.generateRandomAllowedNumber(paired, stage2Pairs.length);
-      paired.push(pair1);
-      let roomID = uuidv4();
-      let set0 = stage2Pairs[pair0];
-      let set1 = stage2Pairs[pair1];
-      roomMappingsMap.get(disc.users[set0[0]]).stages.push(roomID);
-      roomMappingsMap.get(disc.users[set0[1]]).stages.push(roomID);
-      roomMappingsMap.get(disc.users[set1[0]]).stages.push(roomID);
-      roomMappingsMap.get(disc.users[set1[1]]).stages.push(roomID);
-    }
-
-    // Setup ALL "room"
-    let roomID = uuidv4();
-    disc.users.forEach(function (item) {
-      roomMappingsMap.get(item).stages.push(roomID);
-    });
-
-    return Array.from(roomMappingsMap.values());
-
-  }
-
   generateRandomAllowedNumber(list: number[], sampleSize: number): number {
     let f: number;
     while(true) {
@@ -189,6 +142,7 @@ export class AppService {
   findRoomForUser(userID: string, disc: Discussion): string {
     let roomFound = disc.defaultRoom;
     let mapping = disc.userRoomMapping?.find(elem => (elem.userID == userID));
+    // return mapping?.stages[disc.currentStage] ? : roomFound
     return mapping?.stages[disc.currentStage] ? mapping?.stages[disc.currentStage] : roomFound
   }
 

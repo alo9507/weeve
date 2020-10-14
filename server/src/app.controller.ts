@@ -15,8 +15,8 @@ export class AppController {
 
   @Post()
   async createDiscussion(@Body() discussion: Discussion, @Res() res: Response) {
-    await this.appService.storeDiscussion(discussion);
-    return res.status(HttpStatus.OK).send();
+    const newDiscussion = await this.appService.storeDiscussion(discussion);
+    return res.status(HttpStatus.OK).json(newDiscussion)
   }
 
   @Post('/join')
