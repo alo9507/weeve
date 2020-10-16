@@ -1,7 +1,7 @@
 import {Injectable, NotFoundException, ForbiddenException, BadRequestException} from '@nestjs/common';
 import {Discussion, JoinDiscussionBody, DiscussionResponse, UserRoomMapping} from "./models/discussion";
 const { v4: uuidv4 } = require('uuid');
-const roomUtils = require("utils/roomUtils");
+const roomUtils = require("./utils/roomUtils");
 import { DatabaseService } from './database/database.service';
 
 const MIN_PARTICIPANTS: number = 2;
