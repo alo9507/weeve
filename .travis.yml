@@ -1,0 +1,22 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t alo42/weeve -f Dockerfile.dev .
+
+script:
+    - docker run -e CI=true alo42/weeve npm run test
+
+deploy:
+    provider: elasticbeanstalk
+    region: "us-east-2"
+    app: "docker-weeve"
+    env: "DockerWeeve-env"
+    bucket_name: "elasticbeanstalk-us-east-2-273181460905"
+    bucket_path: "docker-weeve"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+     
